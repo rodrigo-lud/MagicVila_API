@@ -1,4 +1,5 @@
 ﻿using MagicVila_VilaAPI.Data;
+using MagicVila_VilaAPI.logging;
 using MagicVila_VilaAPI.Models.Dto;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.AspNetCore.JsonPatch;
@@ -22,14 +23,17 @@ namespace MagicVila_VilaAPI.Controllers
         //}
 
         // **** To log with a custom LogClass
-        public VillaAPIController() { }
+        private readonly ILogging _logger;
+        public VillaAPIController(ILogging logger) { 
+            _logger = logger;
+        }
 
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
-            _logger.LogInformation("Getting all Villas");
+            _logger.Log("Getting all Villas","info");
             return Ok(VillaStore.villaList);
         }
 
@@ -41,16 +45,16 @@ namespace MagicVila_VilaAPI.Controllers
         public ActionResult<VillaDTO> GetVilla(int id)
         {
             if (id == 0) {
-                _logger.LogError("Get Villa Error - Id: " + id);
+                _logger.Log("Get Villa Error - Id: " + id, "error");
                 return BadRequest(); 
             }
             var v = VillaStore.villaList.FirstOrDefault(x => x.Id == id);
             if (v == null) {
-                _logger.LogError("Get Villa Error: Not Found! Id: " + id);
+                _logger.Log("Get Villa Error: Not Found! Id: " + id, "error");
                 return NotFound(); 
             }
 
-            _logger.LogInformation("Getting Villa with code: " + id);
+            _logger.Log("Getting Villa with code: " + id, "info");
             return Ok(v);
         }
 
