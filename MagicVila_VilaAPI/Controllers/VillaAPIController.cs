@@ -22,7 +22,7 @@ namespace MagicVila_VilaAPI.Controllers
         //    _logger = logger;
         //}
 
-        // **** To log with a custom LogClass
+        // **** To log with a custom Log Class - Configure in Program.cs
         private readonly ILogging _logger;
         public VillaAPIController(ILogging logger) { 
             _logger = logger;
